@@ -16,6 +16,25 @@ function gene_to_fitness =  assignFitness(n, a)
     [genotypes_cell, ~] = generateGenotypes(n);
 
     gene_to_fitness = dictionary(string.empty, []);
+
+    for i = 1:2^n
+        gene = genotypes_cell{i};
+        geneStr = convertCharsToStrings(gene);
+        numMutated = length(find(gene == '1'));
+        if numMutated == 0
+            s_a = 0; % ensure wildtype 0000 has fitness 1
+        else
+            r = -1 + (1-(-1))* rand(1); % r is random number between -1 and 1
+            s_a = numMutated/n * exp(a*r);   % selection coefficient is proportional to number of mutations + randomness
+        end 
+        gene_to_fitness(geneStr) = s_a + 1;
+    end
+
+end
+
+
+
+%{
     for i = 0: n
         for j = 1:2^n
             gene = genotypes_cell{j};
@@ -32,4 +51,5 @@ function gene_to_fitness =  assignFitness(n, a)
         end
     end
 
-end
+
+%}
