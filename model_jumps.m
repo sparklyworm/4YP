@@ -26,8 +26,10 @@ y_smoothingSpline = feval(smoothingSpline, 1:numGen);
 
 %% inflection points
 inflectionPoints = findInflectionMultipleThreshold(y_smoothingSpline, [3 1.3]*10^-3);
+% inflectionPoints = findInflectionMultipleThreshold(true_fitness, [3 1.3]*10^-3);
 hold on
 plot(inflectionPoints, y_smoothingSpline(inflectionPoints), 'bo', 'LineWidth', 2);
+% plot(inflectionPoints, true_fitness(inflectionPoints), 'bo', 'LineWidth', 2);
 if rem(length(inflectionPoints), 2) ~= 0
     disp("more inflection points than expected, check and change!")
     disp("debug breakpoint")
