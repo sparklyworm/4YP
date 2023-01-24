@@ -16,3 +16,6 @@ for i = 1:numSim
     simData(i, :) = simpleFitnessLandscape.values()';
 end
 
+%%
+C = cell(4, 1);
+c{1} = [C{1} "bbb"]

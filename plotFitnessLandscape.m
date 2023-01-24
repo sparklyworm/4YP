@@ -1,12 +1,13 @@
-function plotFitnessLandscape(gene_to_fitness, n, forwardMutation)
+function plotFitnessLandscape(gene_to_fitness, forwardMutation)
     
-    if nargin < 3
+    if nargin < 2
         forwardMutation = false;
     end
-
+    
     figure
     maxFitness = max(values(gene_to_fitness));
     genotypes_cell = convertStringsToChars(gene_to_fitness.keys());
+    n = length(genotypes_cell{1});
     %%
     x = 0;
     y = 0;
