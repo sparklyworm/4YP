@@ -1,10 +1,8 @@
-function [fitness, gene_to_fitness, genotype_count_gen] = simulator(mu, a, realFlag)
-    % a = random tune param
+function [fitness, gene_to_fitness, genotype_count_gen] = simulator2(mu, n, a, realFlag)
+    % n = number of loci
     % mu = mutation rate
-    
 
-    % constant parameters
-    n = 4;
+    % constant parameters 
     N = 10^8; % population size
     numGen = 600;
     selective_pressure = 1;

@@ -1,7 +1,7 @@
 clc,clear
 % true data
-true_a = 0.5;
-true_mu = 5 * 10 ^-7;
+true_a = 0.3;
+true_mu = 1 * 10 ^-8;
 n = 4; % number of genes 
 N = 10^8; % population size
 numGen = 600;
@@ -54,4 +54,8 @@ set(gca, 'xscale','log')
 colorbar
 
 %%
- plotFitnessLandscape(gene_to_fitness, n, true)
+plotFitnessLandscape(gene_to_fitness, true)
+plotFitnessLandscapeGraph(gene_to_fitness)
+%%
+figure
+plot(1:numGen, true_fitness)

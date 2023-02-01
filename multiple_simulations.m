@@ -8,7 +8,7 @@ mu = 1.1 *10^-8; % mutation rate
 gene_to_fitness =  assignFitness(n, a);    % maps genotype to fitness value
 genotypes = gene_to_fitness.keys();        % string array of genotypes
 
-plotFitnessLandscape(gene_to_fitness, n, true);
+plotFitnessLandscape(gene_to_fitness, true);
 % save("interesting-landscape.mat")
 %%
 avg_fitness = zeros(n, 1);
@@ -22,8 +22,8 @@ end
 avg_fitness = avg_fitness ./ mutated_gene_count;
 %%
 selective_pressure = 1;
-MU = [1] * 10^-8; % [ 1 5 10] * 10^-8
-numSimulation = 1;
+MU = [ 1 5 1000] * 10^-8;
+numSimulation = 5;
 numGen = 600; % 600
 numPlot = 1;
 figure

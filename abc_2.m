@@ -1,6 +1,6 @@
 clc,clear
 % true data
-true_a = 0.5;
+true_a = 0.3;
 true_mu = 1 * 10 ^-8;
 n = 4; % number of genes 
 N = 10^8; % population size
@@ -56,7 +56,7 @@ for i = 1:numSamples
 
     end
 end
-toc
+total_time = toc;
 %%
 [~,mu_edges] = histcounts(log10(mu_samples), 15);
 figure
