@@ -1,3 +1,4 @@
+%% week 2
 clc,clear
 % true data
 true_a = 0.3;

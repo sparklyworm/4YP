@@ -1,4 +1,4 @@
-function fitness =  modelAdaptiveWalk(fitnessLandscapeBones, N, mu, numGen, selective_pressure)
+function [fitness, genotype_count_gen] =  modelAdaptiveWalk(fitnessLandscapeBones, N, mu, numGen, selective_pressure)
     
     % a simple model for adaptiveWalk, where we dunno the underlying
     % fitness landscape
@@ -13,12 +13,14 @@ function fitness =  modelAdaptiveWalk(fitnessLandscapeBones, N, mu, numGen, sele
     genotype_p(wildtype) = 1;
     
     fitness = zeros(numGen, 1);
+    genotype_count_gen = cell(numGen, 1);
     for gen = 1:numGen
         
         r_mean = calculateMeanFitness(genotype_count, gene_to_fitness);
     
         fitness(gen) = r_mean;  % record for plotting
-        
+        genotype_count_gen{gen} = genotype_count; % record for plotting 
+
         p = updateFrequency(genotype_p, gene_to_fitness, r_mean, selective_pressure); % apply selective pressure
         count = sampleNewGeneration(N, p); % multivariate normal distribution 
         genotype_count = dictionary(genotypes, count);

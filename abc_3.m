@@ -1,41 +1,43 @@
+% week 3
 clc,clear
-% true data
-true_a = 0.3;
-true_mu = 1 * 10 ^-6;
+%% true data
+true_a = 0.1;
+true_mu = 1 * 10 ^-8;
 true_n = 4; % number of genes 
-gene_to_fitness =  assignFitness(true_n, true_a);    % maps genotype to fitness value
 %%
+gene_to_fitness =  assignFitness(true_n, true_a);    % maps genotype to fitness value
 plotFitnessLandscape(gene_to_fitness, true)
 %% generate 10 replicate experiments
 N = 10^8;
 numGen = 600;
 selective_pressure = 1;
-numExp = 10;
-experiments = cell(numExp);
+numExp = 3;
+experiments = cell(numExp, 1);
 for i = 1:numExp
     [true_fitness, ~] = adaptiveWalk(gene_to_fitness, N, true_mu, numGen, selective_pressure);
     experiments{i} = true_fitness;
 end
 %%
-true_fitness = experiments{5};
-percent = 0.99;
-true_t = computeTimeToPercentageMax(true_fitness, percent);
-inflectionPoints =  findInflectionPoints2ndOrder(true_fitness);
-figure
-plot(1:numGen, true_fitness)
-hold on
-plot(true_t, true_fitness(true_t), 'o')
-hold on
-plot(inflectionPoints, true_fitness(inflectionPoints), 'go')
+% true_fitness = experiments{5};
+% percent = 0.99;
+% true_t = computeTimeToPercentageMax(true_fitness, percent);
+% inflectionPoints =  findInflectionPoints2ndOrder(true_fitness);
+% figure
+% plot(1:numGen, true_fitness)
+% hold on
+% plot(true_t, true_fitness(true_t), 'o')
+% hold on
+% plot(inflectionPoints, true_fitness(inflectionPoints), 'go')
 %% get distribution for each experiment
-mu_distributions = cell(numExp);
-n_distributions = cell(numExp);
+numExp = 3;
+mu_distributions = cell(numExp, 1);
+n_distributions = cell(numExp, 1);
 percent = 0.99;
 numSamples = 100;
 mu_prior = makedist('Loguniform','Lower',10^-9,'Upper',10^-4);
 n_domain =1:1:10;
-tic
 %%
+tic
 for j = 1:numExp
     fprintf("====== Experiment %i ======\n", j)
     true_fitness = experiments{j};
@@ -93,6 +95,7 @@ end
 
 
 total_time = toc
+ save("abc_3_data_simulator_3", "experiments", "gene_to_fitness", "mu_distributions", "n_distributions", "true_mu", "true_a","total_time")
 %%
 [~,mu_edges] = histcounts(log10(mu_samples), 15);
 figure
@@ -117,4 +120,33 @@ for j = 1:numExp
     plot(1:numGen, fitness)
     hold on
     plot(inflectionPoints, fitness(inflectionPoints), 'o')
+end
+
+%%
+for j = 1:numExp
+    mu_samples = mu_distributions{j};
+    n_samples = n_distributions{j};
+
+%     figure
+%     [~,mu_edges] = histcounts(log10(mu_samples), 15);
+%     histogram(mu_samples,10.^mu_edges)
+%     set(gca, 'xscale','log')
+%     
+%     figure
+%     [~,n_edges] = histcounts(n_samples);
+%     histogram(n_samples)
+
+    data = [mu_samples, n_samples];
+    figure
+    hist3(data,'CdataMode','auto', 'Edges', {10.^mu_edges, n_edges})
+    set(gca, 'xscale','log')
+    colorbar
+end
+
+%%
+figure
+for j = 1:numExp
+    fitness = experiments{j};
+    hold on
+    plot(1:numGen, fitness)
 end

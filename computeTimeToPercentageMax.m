@@ -3,8 +3,11 @@ function t = computeTimeToPercentageMax(y, percent)
     % percent: 0 - 1
     
     max_y = max(y);
-    percent_y = max_y * percent;
+    min_y = min(y);
+    range_y = max_y - min_y;
 
-    t = find(y>=percent_y, 1);
+    percent_y = range_y * percent;
+
+    t = find(y>=percent_y + min_y, 1);
 
 end

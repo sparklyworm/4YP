@@ -1,10 +1,10 @@
-function [fitness, gene_to_fitness, genotype_count_gen] = simulator(mu, a, realFlag)
+function [fitness, gene_to_fitness, genotype_count_gen] = simulator(mu, n, a, realFlag)
     % a = random tune param
     % mu = mutation rate
+    % n = number of loci
     
 
     % constant parameters
-    n = 4;
     N = 10^8; % population size
     numGen = 600;
     selective_pressure = 1;
@@ -14,7 +14,7 @@ function [fitness, gene_to_fitness, genotype_count_gen] = simulator(mu, a, realF
         [fitness, genotype_count_gen] = adaptiveWalk(gene_to_fitness, N, mu, numGen, selective_pressure);
     else
         gene_to_fitness = constructSimpleFitnessLandscape(n, a); 
-        fitness = modelAdaptiveWalk(gene_to_fitness.values(), N, mu, numGen, selective_pressure);
+        [fitness, genotype_count_gen] = modelAdaptiveWalk(gene_to_fitness.values(), N, mu, numGen, selective_pressure);
     end
     
     %

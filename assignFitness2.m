@@ -1,4 +1,4 @@
-function gene_to_fitness =  assignFitness(n, a)
+function gene_to_fitness =  assignFitness2(n, a, effectSize)
 
     % returns dictionary mapping genotype string to fitness value 
     % "1011" -> 0.12983
@@ -7,6 +7,8 @@ function gene_to_fitness =  assignFitness(n, a)
 
     % n = number of gene in 1 genotype (eg. if n = 4, genotype = 1011 )
     % a = parameter to tune size of randomness
+    % effectSize = effect size of each mutation 
+    % future ideas: effect size can be a random number hoho 
 
     % r_a = 1 + s_a
     % wildtype fitness = 1 (lowest fitness) 
@@ -25,12 +27,10 @@ function gene_to_fitness =  assignFitness(n, a)
             s_a = 0; % ensure wildtype 0000 has fitness 1
         else
             r = -1 + (1-(-1))* rand(1); % r is random number between -1 and 1
-            s_a = numMutated/n * exp(a*r);   % selection coefficient is proportional to number of mutations + randomness
-            %s_a = numMutated * exp(a*r);
+            s_a = effectSize * numMutated * exp(a*r);  % selection coefficient is proportional to number of mutations + randomness
+            
         end 
         gene_to_fitness(geneStr) = s_a + 1;
     end
 
 end
-
-

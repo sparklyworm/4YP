@@ -8,11 +8,14 @@ function inflectionPoints =  findInflectionPoints2ndOrder(y)
     zeroFlag = false;
     inflpts = [0];  % x indices
     
-    n1 = length(grad_1st_order);
-    n2 = length(grad_2nd_order);
-    thresholdPos = 0;
-    thresholdNeg = -0.05 * 10^-3;
-    for i = 1:n2
+    n = length(grad_2nd_order);
+    
+    %thresholdPos = 0;
+    %thresholdNeg = -0.05 * 10^-3;
+    thresholdPos = -0.003 * 10 ^-3;
+    thresholdNeg = -0.01 * 10^-3;
+
+    for i = 1:n
        
         grad2 = grad_2nd_order(i);
         if negFlag && grad2 >= thresholdPos && ~zeroFlag
