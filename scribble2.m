@@ -1,4 +1,3 @@
-
 a = 0;
 n = 4;
 mu = 1 * 10^-8;
@@ -27,99 +26,94 @@ plot(1:600, grad_2nd_order*1000, 'r')
 
 %% 1
 a = 0;
-n = 4;
-mu = 5 * 10^-8;
+n = 6;
+mu = 5 * 10^-6;
 numSamples = 10;
-figure
+% figure
 for i = 1:numSamples
-    sim_fitness = simulator(mu, n, a, false);
+    sim_fitness = simulator3(mu, n, a, numGen, false);
     hold on
-    plot(1:600, sim_fitness, 'b');
+    plot(1:numGen, sim_fitness, 'b');
 end
 %% 2
 a = 0;
-n = 8;
-mu = 5 * 10^-5;
+n = 4;
+mu = 5 * 10^-6;
 numSamples = 10;
 
 for i = 1:numSamples
-    sim_fitness = simulator(mu, n, a, false);
+    sim_fitness = simulator3(mu, n, a, numGen, false);
     hold on
-    plot(1:600, sim_fitness, 'r');
+    plot(1:numGen, sim_fitness, 'r');
 end
 %%
 a = 0;
 n = 4;
-mu = 1 * 10^-6;
-sim_fitness = simulator(mu, n, a, false);
+mu = 1 * 10^-8;
+numGen = 800;
+
+sim_fitness = simulator3(mu, n, a, numGen, false);
 inflpts =  findInflectionPoints2ndOrder(sim_fitness);
 t_01 = computeTimeToPercentageMax(sim_fitness, 0.01);
-t_99 = computeTimeToPercentageMax(sim_fitness, 0.99);
-t_01_to_99 = t_99 - t_01;
+t_95 = computeTimeToPercentageMax(sim_fitness, 0.95);
+t_01_to_95 = t_95 - t_01
 num_levels = round((length(inflpts) - 1)/2);
 
 t_20 = computeTimeToPercentageMax(sim_fitness, 0.2);
 t_80 = computeTimeToPercentageMax(sim_fitness, 0.8);
 total_e = measureWigglyness(sim_fitness, t_20, t_80)
 
-title_text = sprintf("mu = %.2g, n = %i; num levels = %i, t-01-to-99 = %i", mu, n, num_levels, t_01_to_99);
+
+title_text = sprintf("mu = %.2g, n = %i; num levels = %i, t-01-to-99 = %i", mu, n, num_levels, t_01_to_95);
+
 figure
-hold on
-plot(1:600, sim_fitness, 'b')
+plot(1:numGen, sim_fitness, 'b')
 title(title_text);
 hold on
 % plot(inflpts, sim_fitness(inflpts), 'ro')
-plot([t_20 t_80], sim_fitness([t_20, t_80]), 'go')
-hold on
-plot([t_20 t_80], sim_fitness([t_20, t_80]), 'r')
 
+plot([t_01 t_95], sim_fitness([t_01, t_95]), 'go')
+%hold on
+%plot([t_20 t_80], sim_fitness([t_20, t_80]), 'r')
 %%
-clc, clear
-x = [ 11 12 13 14 15];
-y = [ 1 2 3 4 5];
-z = zeros(5);
-x_edges = [11 15];
-y_edges = [1 5];
-for i = 1:length(y)
-    for j = 1:length(y)
-        z(j, i) = j*i;
-    end
+figure
+numGen = length(experiments{1});
+for i = 1:length(experiments)
+    hold on
+    plot(1:numGen, experiments{i})
 end
 
-imagesc('XData', x_edges, 'YData', y_edges, 'CData',z)
-set(gca,'YDir','normal')
-
 %%
-mu = 1 * 10^-8;
 a = 0;
-n = 4 ;
-std_n = 1;
-std_time = 25;
+n = 10;
+mu = 1 * 10^-5;
+numGen = 2800;
 
-mu_samples= [0.5 1 5] * 10^-8;
-n_samples = [ 3 4 5];
-% obj_funcs = zeros(length(mu_samples) * length(n_samples));
-wiggles = zeros(length(mu_samples) * length(n_samples), 1);
-i = 1;
-for m = 1:length(mu_samples)
-    mu = mu_samples(m);
-    for n_i = 1:length(n_samples)
-        n = n_samples(n_i);
-        sim_fitness = simulator(mu, n, a, false);
-        %{
-        t_99 = computeTimeToPercentageMax(sim_fitness, 0.99);
-        t_01 = computeTimeToPercentageMax(sim_fitness, 0.01);
-        t_01_to_99 = t_99 - t_01;
-        t_diff = abs(t_01_to_99 - true_t_01_to_99);
-        obj_funcs(i) = 1/std_n * abs(num_levels - true_n) + 1/std_time * t_diff;
-        %}
-        t_20 = computeTimeToPercentageMax(sim_fitness, 0.2);
-        t_80 = computeTimeToPercentageMax(sim_fitness, 0.8);
-        wiggles(i) = measureWigglyness(sim_fitness, t_20, t_80);
-        i = i + 1;
-    end
-end
+sim_fitness = simulator3(mu, n, a, numGen, false);
+hold on
+plot(1:numGen, sim_fitness, 'b')
+obj = calcObjFunc(experiments, sim_fitness)
 
 %%
-y = [1 1.2 1.5 3.5 5]';
-total_e = measureWigglyness(y, 1, 5);
+fitness = experiments{1};
+inflpts =  findInflectionPoints2ndOrder(fitness);
+figure
+plot(1:length(fitness), fitness);
+hold on
+plot(inflpts, fitness(inflpts), 'ro')
+
+%% plot obj
+obj_1 = obj_matrix;
+obj_1(obj_1 > 60) = 60;
+obj_1_log = log(obj_1);
+disp_obj_1_log = - obj_1_log;
+mu_edges = [10^-9 10^-4];
+n_edges = [1 10];
+title_text = sprintf("Objective function value for mu = %.2g, n = %i", true_mu, true_n);
+figure
+imagesc('XData', mu_edges, 'YData', n_edges, 'CData', disp_obj_1_log)
+title(title_text)
+set(gca,'YDir','normal')
+set(gca, 'xscale','log')
+ylim([0.5 10.5])
+xlim([0.5*10^-9 1.5*10^-4])

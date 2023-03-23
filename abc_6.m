@@ -12,7 +12,7 @@ gene_to_fitness =  assignFitness(true_n, true_a);    % maps genotype to fitness 
 plotFitnessLandscape(gene_to_fitness, true)
 %% generate a few replicate experiments
 N = 10^8;
-numGen = 600;
+numGen = 2800;
 selective_pressure = 1;
 numExp = 5;
 experiments = cell(numExp, 1);
@@ -34,7 +34,7 @@ numSamples = 100;
 mu_prior = makedist('Loguniform','Lower',10^-9,'Upper',10^-4);
 n_domain =1:1:10;
 %%
-obj_threshold = 2.2 ; %2.2 for 3 param, 1.2 for 2 params
+obj_threshold = 10 ; %2.2 for 3 param, 1.2 for 2 params
 std_time = 25; % 30: get slight overestimates for mu; 20 is nice but longer time 
 std_n = 0.8;
 std_wig = 2.5;
@@ -64,7 +64,7 @@ for j = 1:numExp
             mu_s = random(mu_prior,1);
             n_s = randsample(n_domain,1);
            
-            sim_fitness = simulator(mu_s, n_s, sim_a, false);
+            sim_fitness = simulator3(mu_s, n_s, sim_a, numGen, false);
             t_99 = computeTimeToPercentageMax(sim_fitness, 0.99);
             t_01 = computeTimeToPercentageMax(sim_fitness, 0.01);
             t_01_to_99 = t_99 - t_01;
